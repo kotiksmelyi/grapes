@@ -1,4 +1,5 @@
-import { FC, ReactNode } from 'react';
+import dayjs from 'dayjs';
+import { FC, ReactNode, useEffect } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import styles from './Layout.module.css';
 import grapes from './assets/grape.svg';
@@ -13,8 +14,15 @@ export const Layout: FC<Props> = ({}) => {
   const { $filters: dropdownOptions, $selectedFilter: selected } = useUnit(
     dashboard.regionsDropdownStore
   );
+  const { $filters: ilnessOptions, $selectedFilter: selectedIlness } = useUnit(
+    dashboard.illnessStore
+  );
   const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
   const regions = useStore(dashboard.$regions);
+
+  useEffect(() => {
+    dashboard.dateStore.setSelectedFilter('08-04-2021');
+  }, []);
 
   if (!regions) return null;
 
@@ -53,21 +61,37 @@ export const Layout: FC<Props> = ({}) => {
           {regions.find((i) => i.id === selected)?.name ||
             'Краснодарскому краю и Адыгее'}
         </h1>
-        <div>
+        <div className={styles.filters}>
           <DropDown
             placeholder='Регионы'
             options={dropdownOptions}
             value={selected}
-            onChange={dashboard.regionsDropdownStore.setSelectedFilter}
+            style={{ minWidth: 250 }}
+            onChange={(value) =>
+              dashboard.regionsDropdownStore.setSelectedFilter(value || null)
+            }
+            onClear={console.log}
+            allowClear
+          />
+          <DropDown
+            style={{ minWidth: 250 }}
+            onChange={(value) =>
+              dashboard.illnessStore.setSelectedFilter(value || null)
+            }
+            placeholder='Заболевание'
+            options={ilnessOptions}
+            value={selectedIlness}
+            allowClear
           />
           <DatePicker
-            style={{ marginLeft: 30, marginTop: 20 }}
+            value={dayjs(selectedDate)}
             disabledDate={(date) => {
               return !(
                 date.diff('2021-04-07', 'day') > 0 &&
                 date.diff('2021-10-31', 'day') < 0
               );
             }}
+            allowClear={false}
             format={'DD-MM-YYYY'}
             onChange={(_, date) => dashboard.dateStore.setSelectedFilter(date)}
           />

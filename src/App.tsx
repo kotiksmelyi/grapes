@@ -34,6 +34,7 @@ const router = createBrowserRouter([
 function App() {
   useEffect(() => {
     dashboard.fetchRegionsFx();
+    dashboard.fetchIllnessOptionsFx();
   }, [dashboard.fetchRegionsFx]);
 
   return (
@@ -51,4 +52,3 @@ function App() {
 }
 
 export default App;
-
