@@ -8,8 +8,6 @@ import cloud from '../../assets/assets/cloud.svg';
 
 export const ListPage = () => {
   const list = useStore(dashboard.forcastWorst);
-  const loading = useStore(dashboard.fetchForcastWorstFx.pending);
-  if (loading) return <Spin size='large' />;
 
   if (!list.length)
     return <div className={styles.container}>Выберите дату</div>;
@@ -19,7 +17,6 @@ export const ListPage = () => {
         Заболевания с повышенным риском в течение 3 дней:
       </h2>
       {list.map((i, key) => {
-        console.log(list)
         return (
           <div key={key}>
             <div className={styles.regionName}>{i.region.name}</div>

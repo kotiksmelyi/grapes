@@ -6,7 +6,7 @@ import grapes from './assets/grape.svg';
 import { useStore, useUnit } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
 import { DropDown } from '../DropDown/DropDown';
-import { DatePicker } from 'antd';
+import { DatePicker, Spin } from 'antd';
 
 interface Props {}
 
@@ -20,6 +20,10 @@ export const Layout: FC<Props> = ({}) => {
   const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
   const regions = useStore(dashboard.$regions);
 
+  const regionsLoading = useStore(dashboard.fetchRegionsFx.pending);
+  const mapLoading = useStore(dashboard.fetchForcastMapFx.pending);
+  const worstLoading = useStore(dashboard.fetchForcastWorstFx.pending);
+  const loading = regionsLoading || mapLoading || worstLoading;
   useEffect(() => {
     dashboard.dateStore.setSelectedFilter('08-04-2021');
   }, []);
@@ -97,7 +101,7 @@ export const Layout: FC<Props> = ({}) => {
           />
         </div>
       </div>
-      <Outlet />
+      {loading ? <Spin size='large' /> : <Outlet />}
     </div>
   );
 };
