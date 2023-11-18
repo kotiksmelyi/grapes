@@ -7,7 +7,7 @@ const getHint = (name: string, value: number) => {
   return `<div  style="font-size: 1.4em; padding: 3px">${name}: <span>${value}</span></div>`;
 };
 
-export const Map: FC = () => {
+export const MapI: FC = () => {
 
   // const regions = useStore(dashboard.mapStore.$regions);
   const [allRegions, setAllRegions] = useState<IRegionsValue[]>();
