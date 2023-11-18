@@ -11,13 +11,20 @@ import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
 import { createChart } from './chart';
 import { IBarChart, ILineChart, IPage, IPieChart } from '../lib/types';
 
+export interface IRegionsValue {
+  id: number;
+  name: string;
+  coords: [number, number][];
+  code: string;
+}
+
 export const createDashboard = () => {
   const fetchRegionsFx = createEffect(async () => {
-    const res = await http.get('/geography/regions');
+    const res = await http.get<IRegionsValue[]>('/geography/regions');
     return res.data;
   });
 
-  const $regions = createStore([]).on(
+  const $regions = createStore<IRegionsValue[]>([]).on(
     fetchRegionsFx.doneData,
     (_, payload) => payload
   );
@@ -31,12 +38,6 @@ export const createDashboard = () => {
       regionsDropdownStore.setFilterOptions,
       regionsDropdownStore.selectFist,
     ],
-  });
-
-  sample({
-    clock: fetchRegionsFx.doneData,
-    fn: (source) => source[0].value,
-    target: regionsDropdownStore.setSelectedFilter,
   });
 
   regionsDropdownStore.setSelectedFilter.watch(console.log);
