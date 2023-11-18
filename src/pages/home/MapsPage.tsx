@@ -8,14 +8,7 @@ import { dashboard } from '../../store/dataStore';
 import { Layout } from '../../components/layout/Layout';
 
 export const MapsPage: FC = () => {
-  const downloadRef = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const download = async () => {
-    setLoading(true);
-    await handleDownloadPdf(downloadRef.current);
-
-    setLoading(false);
-  };
+ 
 
   const regionOptions = useStore(dashboard.regionStore.$filters);
   const region = useStore(dashboard.regionStore.$selectedFilter);
@@ -30,7 +23,7 @@ export const MapsPage: FC = () => {
   return (
     <Layout>
       <div className={styles.container}>
-        <div ref={downloadRef} style={{ padding: '0 30px 30px' }}>
+        <div style={{ padding: '0 30px 30px' }}>
           <MapContainer />
         </div>
       </div>

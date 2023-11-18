@@ -1,9 +1,7 @@
 import { useYMaps } from '@pbe/react-yandex-maps';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useStore } from 'effector-react';
-import { mapStore } from '../../store/map/mapStore';
 import { dashboard } from '../../store/dataStore';
-import styles from './Map.module.css';
 
 const getHint = (name: string, value: number) => {
   return `<div  style="font-size: 1.4em; padding: 3px">${name}: <span>${value}</span></div>`;
@@ -23,7 +21,7 @@ export const Map: FC = () => {
     }
 
     const myMap = new ymaps.Map(mapRef.current, {
-      center: [55.76, 37.64],
+      center: [45.04484, 38.97603],
       zoom: 4,
     });
     setMap(myMap);
