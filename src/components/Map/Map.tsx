@@ -11,10 +11,9 @@ const getHint = (name: string, value: number) => {
 export const MapI: FC = () => {
   const regions = useStore(dashboard.$regions);
 
-  const diseases = useStore(dashboard.forcastWorst);
+  const diseases = useStore(dashboard.forcastMap);
 
   if (!diseases.length) return null;
-  console.log(diseases);
 
   return (
     <Map

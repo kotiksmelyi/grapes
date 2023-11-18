@@ -1,4 +1,3 @@
-import { number } from 'echarts';
 import { createEvent, createStore } from 'effector';
 import { IDropdownItem } from '../../lib/types';
 

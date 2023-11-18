@@ -49,6 +49,23 @@ export const createDashboard = () => {
     (_, payload) => payload
   );
 
+  const fetchForcastMapFx = createEffect(
+    async ({ date, regions }: { date: string; regions: number[] }) => {
+      const res = await http.get<ForecastWorst[]>(
+        `/stats/forecast/map/${date}`,
+        {
+          params: { region_ids: regions },
+        }
+      );
+      return res.data;
+    }
+  );
+
+  const forcastMap = createStore<ForecastWorst[]>([]).on(
+    fetchForcastWorstFx.doneData,
+    (_, payload) => payload
+  );
+
   const $regions = createStore<IRegionsValue[]>([]).on(
     fetchRegionsFx.doneData,
     (_, payload) => payload
@@ -59,7 +76,7 @@ export const createDashboard = () => {
   sample({
     source: [dateStore.$selectedFilter, regionsDropdownStore.$selectedFilter],
     fn: ([date, regions]) => ({ date, regions }),
-    target: fetchForcastWorstFx,
+    target: [fetchForcastWorstFx, fetchForcastMapFx],
   });
 
   sample({
@@ -197,6 +214,9 @@ export const createDashboard = () => {
     forcastWorst,
     $analysis,
     fetchAnalysisFx,
+
+    forcastMap,
+    fetchForcastMapFx,
 
     lineChart,
     fetchLineChartFx,
