@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { YMaps } from '@pbe/react-yandex-maps';
-import { Map } from './Map';
+import { MapI } from './Map';
 import { DropDown } from '../DropDown/DropDown';
 import styles from './Map.module.css';
 import { useStore } from 'effector-react';
@@ -32,7 +32,7 @@ export const MapContainer: FC = () => {
       </div>
       <div className={styles.mapContainer}>
         <YMaps query={{ load: 'package.full' }}>
-          <Map />
+          <MapI />
         </YMaps>
       </div>
     </div>

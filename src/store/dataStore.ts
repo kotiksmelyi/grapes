@@ -14,7 +14,7 @@ import { IBarChart, ILineChart, IPage, IPieChart } from '../lib/types';
 
 export const createDashboard = () => {
   const fetchRegionsFx = createEffect(async () => {
-    const res = await http.get('/geography/regions');
+    const res = await http.get('/geography');
     return toDropdownOptions(res.data);
   });
 
@@ -27,7 +27,7 @@ export const createDashboard = () => {
     target: regionStore.setSelectedFilter,
   });
 
-  regionStore.setSelectedFilter.watch(console.log);
+  // regionStore.setSelectedFilter.watch(console.log);
 
   const fetchFeatureFx = createEffect(async () => {
     const res = await http.get('/stats/features');
