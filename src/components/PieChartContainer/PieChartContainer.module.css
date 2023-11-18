@@ -1,0 +1,8 @@
+
+.container {
+    height: 800px;
+    border: #8C64D8 2px solid;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 50px;
+}

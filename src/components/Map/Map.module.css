@@ -1,0 +1,33 @@
+.container {
+    width: 100%;
+    border: #89E159 2px solid;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 50px;
+    padding:4px;
+}
+
+.header {
+    padding: 5px 0 5px 10px;
+    display: flex;
+    align-items: center;
+    background-color: #89E159;
+    height: 50px;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 20px;
+}
+
+.filter {
+    display: flex;
+    gap: 20px;
+    min-width: fit-content;
+}
+
+.mapContainer {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.map {
+    height: 600px;
+}
