@@ -1,11 +1,18 @@
 import { Polygon, useYMaps, Map } from '@pbe/react-yandex-maps';
 import { FC, useEffect, useRef, useState } from 'react';
 import { http } from '../../lib/server/http';
-import { IRegionsValue } from '../../store/map/mapStore';
 
 const getHint = (name: string, value: number) => {
   return `<div  style="font-size: 1.4em; padding: 3px">${name}: <span>${value}</span></div>`;
 };
+
+
+export interface IRegionsValue {
+  id: number;
+  name: string;
+  coords: [number, number][];
+  code: string;
+}
 
 export const MapI: FC = () => {
 

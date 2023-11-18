@@ -1,4 +1,4 @@
-import { createEvent, createStore } from 'effector';
+import { createEvent, createStore, sample } from 'effector';
 import { IDropdownItem } from '../../lib/types';
 
 export const createFilter = () => {
@@ -10,10 +10,17 @@ export const createFilter = () => {
   );
 
   const setSelectedFilter = createEvent<number>();
-  const $selectedFilter = createStore<number | null>(null).on(
-    setSelectedFilter,
-    (_, payload) => payload
-  );
+  const selectFist = createEvent<IDropdownItem[]>();
 
-  return { $filters, setFilterOptions, setSelectedFilter, $selectedFilter };
+  const $selectedFilter = createStore<number | null>(null)
+    .on(setSelectedFilter, (_, payload) => payload)
+    .on(selectFist, (_, payload) => (payload.length ? payload[0] : []));
+
+  return {
+    $filters,
+    selectFist,
+    setFilterOptions,
+    setSelectedFilter,
+    $selectedFilter,
+  };
 };

@@ -2,11 +2,11 @@ import './App.css';
 import { ConfigProvider } from 'antd';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { MapsPage } from './pages/home/MapsPage';
-import { ListPage } from './pages/analytics/ListPage';
 import { useEffect } from 'react';
 import { dashboard } from './store/dataStore';
 import { ChartsPage } from './pages/charts/ChartsPage';
 import { ArchivePage } from './pages/archive/ArchivePage';
+import { ListPage } from './pages/list/ListPage';
 
 const router = createBrowserRouter([
   {
@@ -30,9 +30,8 @@ const router = createBrowserRouter([
 
 function App() {
   useEffect(() => {
-    dashboard.fetchFeatureFx();
     dashboard.fetchRegionsFx();
-  }, [dashboard.fetchFeatureFx, dashboard.fetchRegionsFx]);
+  }, [dashboard.fetchRegionsFx]);
 
   return (
     <ConfigProvider
