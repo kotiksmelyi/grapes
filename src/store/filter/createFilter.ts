@@ -9,7 +9,7 @@ export const createFilter = (defaultValue: string | number | undefined) => {
     (_, payload) => payload
   );
 
-  const setSelectedFilter = createEvent<number>();
+  const setSelectedFilter = createEvent<number | string | null>();
   const selectFist = createEvent<IDropdownItem[]>();
 
   const $selectedFilter = createStore<number | string | null>(

@@ -30,7 +30,7 @@ export const createDashboard = () => {
     return res.data;
   });
 
-  const dateStore = createFilter('08-04-2021');
+  const dateStore = createFilter();
 
   const fetchForcastWorstFx = createEffect(
     async ({ date, regions }: { date: string; regions: number[] }) => {
