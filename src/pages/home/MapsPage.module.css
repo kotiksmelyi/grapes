@@ -2,3 +2,39 @@
   margin: 0 100px 30px;
 }
 
+.card {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid #89e159;
+  padding: 19px 50px;
+  background: #1f2431;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card p {
+  color: #dbe2f9;
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.455px;
+}
+
+.card span {
+  font-weight: 600;
+  color: #89e159;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}

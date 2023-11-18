@@ -10,6 +10,7 @@ import { http } from '../lib/server/http';
 import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
 import { createChart } from './chart';
 import {
+  ForecastMap,
   ForecastWorst,
   IBarChart,
   ILineChart,
@@ -51,18 +52,15 @@ export const createDashboard = () => {
 
   const fetchForcastMapFx = createEffect(
     async ({ date, regions }: { date: string; regions: number[] }) => {
-      const res = await http.get<ForecastWorst[]>(
-        `/stats/forecast/map/${date}`,
-        {
-          params: { region_ids: regions },
-        }
-      );
+      const res = await http.get<ForecastMap[]>(`/stats/forecast/map/${date}`, {
+        params: { region_ids: regions },
+      });
       return res.data;
     }
   );
 
-  const forcastMap = createStore<ForecastWorst[]>([]).on(
-    fetchForcastWorstFx.doneData,
+  const forcastMap = createStore<ForecastMap[]>([]).on(
+    fetchForcastMapFx.doneData,
     (_, payload) => payload
   );
 

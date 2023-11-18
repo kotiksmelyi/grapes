@@ -18,7 +18,7 @@ export const MapI: FC = () => {
   return (
     <Map
       defaultState={{ center: [45.097572, 38.588104], zoom: 7 }}
-      style={{ width: '100%', height: '500px' }}
+      style={{ width: '100%', height: '450px' }}
     >
       {regions?.map((e) => (
         <Polygon

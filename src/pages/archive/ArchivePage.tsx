@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import { Layout } from '../../components/layout/Layout';
 import {
   Button,
   DatePicker,
@@ -11,6 +10,8 @@ import {
 } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { http } from '../../lib/server/http';
+import { useStore } from 'effector-react';
+import { dashboard } from '../../store/dataStore';
 
 interface IData {
   date: string;
@@ -23,6 +24,7 @@ export const ArchivePage: FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [form] = Form.useForm();
   const [data, setData] = useState<IData>();
+  const regions = useStore(dashboard.regionsDropdownStore.$selectedFilter);
 
   const getData = async () => {
     const response = await http.get('/events/');
@@ -31,39 +33,22 @@ export const ArchivePage: FC = () => {
 
   const postEvent = async () => {
     const fields = form.getFieldsValue(true);
-    console.log(fields);
+    await http.post('/events/', {
+      ...fields,
+      date: fields.date.toISOString().split('T')[0],
+      region_id: regions,
+    });
+    await getData();
+    setOpen(false);
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  // const data = [
-  //   {
-  //     date: '2022-05-22',
-  //     humidity: '80',
-  //     temp: '+20',
-  //     notes: 'Обработка от клещей ядом',
-  //   },
-  //   {
-  //     date: '2022-05-21',
-  //     humidity: '80',
-  //     temp: '+25',
-  //     notes: 'Обработка от клещей ядом',
-  //   },
-  //   {
-  //     date: '2022-05-20',
-  //     humidity: '80',
-  //     temp: '+24',
-  //     notes: 'Обработка от клещей ядом',
-  //   },
-  //   {
-  //     date: '2022-05-19',
-  //     humidity: '80',
-  //     temp: '+17',
-  //     notes: 'Обработка от клещей ядом',
-  //   },
-  // ];
+  useEffect(() => {
+    form.resetFields();
+  }, [open]);
 
   const columns: ColumnsType<any> = [
     {
@@ -112,7 +97,15 @@ export const ArchivePage: FC = () => {
           autoComplete='off'
         >
           <Form.Item label='Дата' labelCol={{ span: 24 }} name='date'>
-            <DatePicker format={'DD-MM-YYYY'} />
+            <DatePicker
+              format={'DD-MM-YYYY'}
+              disabledDate={(date) => {
+                return !(
+                  date.diff('2021-04-07', 'day') > 0 &&
+                  date.diff('2021-10-31', 'day') < 0
+                );
+              }}
+            />
           </Form.Item>
           <Form.Item label='Температура' name='temp' labelCol={{ span: 24 }}>
             <InputNumber />
@@ -137,7 +130,12 @@ export const ArchivePage: FC = () => {
         Добавить событие
       </Button>
       <div style={{ margin: '0px 100px' }}>
-        <Table rowKey={'id'} dataSource={data} columns={columns} />
+        <Table
+          rowKey={'id'}
+          dataSource={data}
+          columns={columns}
+          pagination={false}
+        />
       </div>
     </div>
   );
