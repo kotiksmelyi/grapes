@@ -1,4 +1,3 @@
-import { createMap } from './map/mapStore';
 import { createFilter } from './filter/createFilter';
 import {
   createEffect,
@@ -15,19 +14,32 @@ import { IBarChart, ILineChart, IPage, IPieChart } from '../lib/types';
 export const createDashboard = () => {
   const fetchRegionsFx = createEffect(async () => {
     const res = await http.get('/geography/regions');
-    return toDropdownOptions(res.data);
+    return res.data;
   });
 
-  const regionStore = createFilter();
+  const $regions = createStore([]).on(
+    fetchRegionsFx.doneData,
+    (_, payload) => payload
+  );
 
-  forward({ from: fetchRegionsFx.doneData, to: regionStore.setFilterOptions });
+  const regionsDropdownStore = createFilter();
+
+  sample({
+    clock: $regions,
+    fn: toDropdownOptions,
+    target: [
+      regionsDropdownStore.setFilterOptions,
+      regionsDropdownStore.selectFist,
+    ],
+  });
+
   sample({
     clock: fetchRegionsFx.doneData,
     fn: (source) => source[0].value,
-    target: regionStore.setSelectedFilter,
+    target: regionsDropdownStore.setSelectedFilter,
   });
 
-  regionStore.setSelectedFilter.watch(console.log);
+  regionsDropdownStore.setSelectedFilter.watch(console.log);
 
   const fetchFeatureFx = createEffect(async () => {
     const res = await http.get('/stats/features');
@@ -46,7 +58,6 @@ export const createDashboard = () => {
     target: featureStore.setSelectedFilter,
   });
 
-  const mapStore = createMap();
   const fetchBarChartFx = createEffect(
     async ({ feature, order }: { feature?: number; order?: boolean }) => {
       const res = await http.get<IPage<IBarChart>>('/stats/feature-values', {
@@ -59,11 +70,6 @@ export const createDashboard = () => {
       return res.data.results;
     }
   );
-  sample({
-    source: featureStore.$selectedFilter,
-    fn: (source) => (source !== null ? source : 1),
-    target: mapStore.fetchRegionsFx,
-  });
 
   const barChart = createChart<IBarChart>();
 
@@ -77,15 +83,6 @@ export const createDashboard = () => {
     setOrder,
     (_, payload) => payload
   );
-
-  sample({
-    source: [$order, featureStore.$selectedFilter],
-    fn: (source) => ({
-      order: source[0],
-      feature: source[1] !== null ? source[1] : 1,
-    }),
-    target: fetchBarChartFx,
-  });
 
   const fetchPieChartFx = createEffect(
     async ({ feature, region }: { feature: number; region: number }) => {
@@ -124,7 +121,10 @@ export const createDashboard = () => {
     to: pieChart.setChartOptions,
   });
   sample({
-    source: [regionStore.$selectedFilter, featureStore.$selectedFilter],
+    source: [
+      regionsDropdownStore.$selectedFilter,
+      featureStore.$selectedFilter,
+    ],
     fn: (source) => ({
       region: source[0] !== null ? source[0] : 1,
       feature: source[1] !== null ? source[1] : 1,
@@ -148,21 +148,16 @@ export const createDashboard = () => {
   >([]).on(fetchAnalysisFx.doneData, (_, payload) => payload);
 
   forward({
-    from: regionStore.$selectedFilter,
+    from: regionsDropdownStore.$selectedFilter,
     to: fetchAnalysisFx,
   });
 
   const lineChart = createChart<ILineChart>();
 
-  forward({
-    from: fetchLineChartFx.doneData,
-    to: lineChart.setChartOptions,
-  });
-
   return {
-    mapStore,
+    $regions,
     featureStore,
-    regionStore,
+    regionsDropdownStore,
     fetchRegionsFx,
     fetchFeatureFx,
     pieChart,

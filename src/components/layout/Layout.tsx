@@ -2,12 +2,19 @@ import { FC, ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import styles from './Layout.module.css';
 import grapes from './assets/grape.svg';
+import { useStore } from 'effector-react';
+import { dashboard } from '../../store/dataStore';
 
 interface Props {
   children: ReactNode;
 }
 
 export const Layout: FC<Props> = ({ children }) => {
+  const regionDropdown = useStore(dashboard.regionsDropdownStore.$filters);
+  const regions = useStore(dashboard.$regions);
+  console.log(regionDropdown);
+  console.log(regions);
+
   return (
     <div className={styles.layout}>
       <img src={grapes} className={styles.image} />
@@ -37,7 +44,9 @@ export const Layout: FC<Props> = ({ children }) => {
           Архив
         </NavLink>
       </div>
-      <h1 className={styles.header}>Аналитика по городу: Новороссийск</h1>
+      <div>
+        <h1 className={styles.header}>Аналитика по городу: Новороссийск</h1>
+      </div>
       {children}
     </div>
   );
