@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { YMaps } from '@pbe/react-yandex-maps';
 import { MapI } from './Map';
-import { DropDown } from '../DropDown/DropDown';
 import styles from './Map.module.css';
 
 export const MapContainer: FC = () => {

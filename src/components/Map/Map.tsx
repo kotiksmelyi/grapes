@@ -1,34 +1,17 @@
 import { Polygon, useYMaps, Map } from '@pbe/react-yandex-maps';
+import { useStore } from 'effector-react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { http } from '../../lib/server/http';
+import { dashboard } from '../../store/dataStore';
 
 const getHint = (name: string, value: number) => {
   return `<div  style="font-size: 1.4em; padding: 3px">${name}: <span>${value}</span></div>`;
 };
 
-
-export interface IRegionsValue {
-  id: number;
-  name: string;
-  coords: [number, number][];
-  code: string;
-}
-
 export const MapI: FC = () => {
-
-  // const regions = useStore(dashboard.mapStore.$regions);
-  const [allRegions, setAllRegions] = useState<IRegionsValue[]>();
-
-  const getRegions = async () => {
-    const res = await http.get('/geography/regions');
-    setAllRegions(res.data);
-  };
-
-  useEffect(() => {
-    getRegions();
-  }, []);
-
+  const regions = useStore(dashboard.$regions);
   // useEffect(() => {
+  //
   //   if (!ymaps || !mapRef.current) {
   //     return;
   //   }
@@ -61,15 +44,12 @@ export const MapI: FC = () => {
   // //   }
   // // }, [map, regions]);
 
-  // // console.log(regions)
-
-  console.log(allRegions?.at(0)?.coords);
   return (
     <Map
       defaultState={{ center: [45.097572, 38.588104], zoom: 15 }}
       style={{ width: '100%', height: '500px' }}
     >
-      {allRegions?.map((e) => (
+      {regions?.map((e) => (
         <Polygon
           geometry={e.coords}
           options={{

@@ -14,7 +14,7 @@ export const createFilter = () => {
 
   const $selectedFilter = createStore<number | null>(null)
     .on(setSelectedFilter, (_, payload) => payload)
-    .on(selectFist, (_, payload) => (payload.length ? payload[0] : []));
+    .on(selectFist, (_, payload) => (payload.length ? payload[0].value : null));
 
   return {
     $filters,

@@ -2,18 +2,21 @@ import { FC, ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import styles from './Layout.module.css';
 import grapes from './assets/grape.svg';
-import { useStore } from 'effector-react';
+import { useStore, useUnit } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
+import { DropDown } from '../DropDown/DropDown';
 
 interface Props {
   children: ReactNode;
 }
 
 export const Layout: FC<Props> = ({ children }) => {
-  const regionDropdown = useStore(dashboard.regionsDropdownStore.$filters);
+  const { $filters: dropdownOptions, $selectedFilter: selected } = useUnit(
+    dashboard.regionsDropdownStore
+  );
   const regions = useStore(dashboard.$regions);
-  console.log(regionDropdown);
-  console.log(regions);
+
+  if (!regions) return null;
 
   return (
     <div className={styles.layout}>
@@ -45,7 +48,14 @@ export const Layout: FC<Props> = ({ children }) => {
         </NavLink>
       </div>
       <div>
-        <h1 className={styles.header}>Аналитика по городу: Новороссийск</h1>
+        <h1 className={styles.header}>
+          Аналитика по: {regions.find((i) => i.id === selected)?.name}
+        </h1>
+        <DropDown
+          options={dropdownOptions}
+          value={selected}
+          onChange={dashboard.regionsDropdownStore.setSelectedFilter}
+        />
       </div>
       {children}
     </div>
