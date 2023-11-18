@@ -1,7 +1,8 @@
+import { number } from 'echarts';
 import { createEvent, createStore } from 'effector';
 import { IDropdownItem } from '../../lib/types';
 
-export const createFilter = () => {
+export const createFilter = (defaultValue: string | number | undefined) => {
   const setFilterOptions = createEvent();
 
   const $filters = createStore<IDropdownItem[]>([]).on(
@@ -12,7 +13,9 @@ export const createFilter = () => {
   const setSelectedFilter = createEvent<number>();
   const selectFist = createEvent<IDropdownItem[]>();
 
-  const $selectedFilter = createStore<number | null>(null)
+  const $selectedFilter = createStore<number | string | null>(
+    defaultValue || null
+  )
     .on(setSelectedFilter, (_, payload) => payload)
     .on(selectFist, (_, payload) => (payload.length ? payload[0].value : null));
 

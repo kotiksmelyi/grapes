@@ -5,12 +5,10 @@ import { Layout } from '../../components/layout/Layout';
 
 export const MapsPage: FC = () => {
   return (
-    <Layout>
-      <div className={styles.container}>
-        <div style={{ padding: '0 30px 30px' }}>
-          <MapContainer />
-        </div>
+    <div className={styles.container}>
+      <div style={{ padding: '0 30px 30px' }}>
+        <MapContainer />
       </div>
-    </Layout>
+    </div>
   );
 };

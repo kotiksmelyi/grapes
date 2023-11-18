@@ -93,54 +93,52 @@ export const ArchivePage: FC = () => {
   ];
 
   return (
-    <Layout>
-      <div>
-        <Modal
-          title='Добавить событие'
-          destroyOnClose
-          open={open}
-          onCancel={() => {
-            setOpen(false);
-          }}
-          onOk={postEvent}
+    <div>
+      <Modal
+        title='Добавить событие'
+        destroyOnClose
+        open={open}
+        onCancel={() => {
+          setOpen(false);
+        }}
+        onOk={postEvent}
+      >
+        <Form
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 24 }}
+          style={{ maxWidth: 800 }}
+          form={form}
+          onFinish={console.log}
+          autoComplete='off'
         >
-          <Form
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 24 }}
-            style={{ maxWidth: 800 }}
-            form={form}
-            onFinish={console.log}
-            autoComplete='off'
+          <Form.Item label='Дата' labelCol={{ span: 24 }} name='date'>
+            <DatePicker format={'DD-MM-YYYY'} />
+          </Form.Item>
+          <Form.Item label='Температура' name='temp' labelCol={{ span: 24 }}>
+            <InputNumber />
+          </Form.Item>
+          <Form.Item
+            label='Относительная влажность'
+            name='humidity'
+            labelCol={{ span: 24 }}
           >
-            <Form.Item label='Дата' labelCol={{ span: 24 }} name='date'>
-              <DatePicker format={'DD-MM-YYYY'} />
-            </Form.Item>
-            <Form.Item label='Температура' name='temp' labelCol={{ span: 24 }}>
-              <InputNumber />
-            </Form.Item>
-            <Form.Item
-              label='Относительная влажность'
-              name='humidity'
-              labelCol={{ span: 24 }}
-            >
-              <InputNumber />
-            </Form.Item>
-            <Form.Item
-              label='Проведенные мероприятия'
-              name='notes'
-              labelCol={{ span: 24 }}
-            >
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
-        <Button onClick={() => setOpen(true)} style={{ margin: '20px 100px' }}>
-          Добавить событие
-        </Button>
-        <div style={{ margin: '0px 100px' }}>
-          <Table rowKey={'id'} dataSource={data} columns={columns} />
-        </div>
+            <InputNumber />
+          </Form.Item>
+          <Form.Item
+            label='Проведенные мероприятия'
+            name='notes'
+            labelCol={{ span: 24 }}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Button onClick={() => setOpen(true)} style={{ margin: '20px 100px' }}>
+        Добавить событие
+      </Button>
+      <div style={{ margin: '0px 100px' }}>
+        <Table rowKey={'id'} dataSource={data} columns={columns} />
       </div>
-    </Layout>
+    </div>
   );
 };

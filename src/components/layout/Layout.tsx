@@ -13,6 +13,7 @@ export const Layout: FC<Props> = ({}) => {
   const { $filters: dropdownOptions, $selectedFilter: selected } = useUnit(
     dashboard.regionsDropdownStore
   );
+  const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
   const regions = useStore(dashboard.$regions);
 
   if (!regions) return null;
@@ -22,7 +23,7 @@ export const Layout: FC<Props> = ({}) => {
       <img src={grapes} className={styles.image} />
       <div className={styles.container}>
         <NavLink
-          to='/'
+          to='/map'
           className={({ isActive }) => `${isActive && styles.active}`}
         >
           Интерактивная карта
