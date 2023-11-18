@@ -1,5 +1,5 @@
 import { createFilter } from './filter/createFilter';
-import { createEffect, createStore, sample } from 'effector';
+import { createEffect, createEvent, createStore, sample } from 'effector';
 import { http } from '../lib/server/http';
 import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
 import { ForecastMap, ForecastWorst } from '../lib/types';
@@ -102,6 +102,35 @@ export const createDashboard = () => {
 
   const pieChart = createChart();
 
+  const fetchHeatmapPercent = createEffect(async (date: string) => {
+    const res = await http.get(`stats/heatmap/${date}`, {
+      params: { mode: 'percent' },
+    });
+    return res.data;
+  });
+
+  const $hitmapPercent = createStore<any>(null).on(
+    fetchHeatmapPercent.doneData,
+    (_, payload) => payload
+  );
+
+  const fetchHeatmapAmount = createEffect(async (date: string) => {
+    const res = await http.get(`stats/heatmap/${date}`, {
+      params: { mode: 'amount' },
+    });
+    return res.data;
+  });
+  const $hitmapAmount = createStore<any>(null).on(
+    fetchHeatmapAmount.doneData,
+    (_, payload) => payload
+  );
+
+  sample({
+    clock: dateStore.$selectedFilter,
+    fn: () => '15-08-2021',
+    target: [fetchHeatmapAmount, fetchHeatmapPercent],
+  });
+
   sample({
     clock: fetchForcastWorstFx.doneData,
     fn: (data) =>
@@ -109,6 +138,8 @@ export const createDashboard = () => {
     target: pieChart.setChartOptions,
   });
   return {
+    $hitmapAmount,
+    $hitmapPercent,
     $regions,
     regionsDropdownStore,
     fetchRegionsFx,

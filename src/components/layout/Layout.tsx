@@ -94,8 +94,8 @@ export const Layout: FC<Props> = ({}) => {
             value={dayjs(selectedDate)}
             disabledDate={(date) => {
               return !(
-                date.diff('2021-04-07', 'day') > 0 &&
-                date.diff('2021-10-31', 'day') < 0
+                date.diff('2021-04-15', 'day') > 0 &&
+                date.diff('2021-10-20', 'day') < 0
               );
             }}
             allowClear={false}

@@ -2,9 +2,9 @@ import { FC, useMemo } from 'react';
 import { useStore } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
 import { Chart, EChartsOption } from '../chart/Chart';
-import styles from './PieChartContainer.module.css';
+import styles from './Charts.module.css';
 
-export const PieChartContainer: FC = () => {
+export const PieChart: FC = () => {
   const pieChart = useStore(dashboard.pieChart.$chart);
 
   const options: EChartsOption = useMemo(() => {
