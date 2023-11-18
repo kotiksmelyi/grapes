@@ -9,7 +9,13 @@ import {
 import { http } from '../lib/server/http';
 import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
 import { createChart } from './chart';
-import { IBarChart, ILineChart, IPage, IPieChart } from '../lib/types';
+import {
+  ForecastWorst,
+  IBarChart,
+  ILineChart,
+  IPage,
+  IPieChart,
+} from '../lib/types';
 
 export interface IRegionsValue {
   id: number;
@@ -24,6 +30,25 @@ export const createDashboard = () => {
     return res.data;
   });
 
+  const dateStore = createFilter();
+
+  const fetchForcastWorstFx = createEffect(
+    async ({ date, regions }: { date: string; regions: number[] }) => {
+      const res = await http.get<ForecastWorst[]>(
+        `/stats/forecast/worst/${date}`,
+        {
+          params: { region_ids: regions },
+        }
+      );
+      return res.data;
+    }
+  );
+
+  const forcastWorst = createStore<ForecastWorst[]>([]).on(
+    fetchForcastWorstFx.doneData,
+    (_, payload) => payload
+  );
+
   const $regions = createStore<IRegionsValue[]>([]).on(
     fetchRegionsFx.doneData,
     (_, payload) => payload
@@ -32,15 +57,16 @@ export const createDashboard = () => {
   const regionsDropdownStore = createFilter();
 
   sample({
-    clock: $regions,
-    fn: toDropdownOptions,
-    target: [
-      regionsDropdownStore.setFilterOptions,
-      regionsDropdownStore.selectFist,
-    ],
+    source: [dateStore.$selectedFilter, regionsDropdownStore.$selectedFilter],
+    fn: ([date, regions]) => ({ date, regions }),
+    target: fetchForcastWorstFx,
   });
 
-  regionsDropdownStore.setSelectedFilter.watch(console.log);
+  sample({
+    clock: $regions,
+    fn: toDropdownOptions,
+    target: [regionsDropdownStore.setFilterOptions],
+  });
 
   const fetchFeatureFx = createEffect(async () => {
     const res = await http.get('/stats/features');
@@ -167,12 +193,14 @@ export const createDashboard = () => {
     fetchBarChartFx,
     setOrder,
     $order,
-
+    fetchForcastWorstFx: fetchForcastWorstFx,
+    forcastWorst,
     $analysis,
     fetchAnalysisFx,
 
     lineChart,
     fetchLineChartFx,
+    dateStore,
   };
 };
 
