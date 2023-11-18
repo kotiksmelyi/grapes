@@ -14,6 +14,9 @@ export const Layout: FC<Props> = ({}) => {
   const { $filters: dropdownOptions, $selectedFilter: selected } = useUnit(
     dashboard.regionsDropdownStore
   );
+  const { $filters: ilnessOptions, $selectedFilter: selectedIlness } = useUnit(
+    dashboard.illnessStore
+  );
   const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
   const regions = useStore(dashboard.$regions);
 
@@ -58,19 +61,29 @@ export const Layout: FC<Props> = ({}) => {
           {regions.find((i) => i.id === selected)?.name ||
             'Краснодарскому краю и Адыгее'}
         </h1>
-        <div>
+        <div className={styles.filters}>
           <DropDown
             placeholder='Регионы'
             options={dropdownOptions}
             value={selected}
+            style={{ minWidth: 250 }}
             onChange={(value) =>
               dashboard.regionsDropdownStore.setSelectedFilter(value || null)
             }
             onClear={console.log}
             allowClear
           />
+          <DropDown
+            style={{ minWidth: 250 }}
+            onChange={(value) =>
+              dashboard.illnessStore.setSelectedFilter(value || null)
+            }
+            placeholder='Заболевание'
+            options={ilnessOptions}
+            value={selectedIlness}
+            allowClear
+          />
           <DatePicker
-            style={{ marginLeft: 30, marginTop: 20 }}
             value={dayjs(selectedDate)}
             disabledDate={(date) => {
               return !(

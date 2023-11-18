@@ -32,12 +32,31 @@ export const createDashboard = () => {
 
   const dateStore = createFilter();
 
+  const illnessStore = createFilter();
+
+  const fetchIllnessOptionsFx = createEffect(async () => {
+    const res = await http.get('/stats/illnesses');
+    return res.data;
+  });
+
+  illnessStore.$filters.on(fetchIllnessOptionsFx.doneData, (_, payload) =>
+    payload.map((i) => ({ value: i.id, label: i.name }))
+  );
+
   const fetchForcastWorstFx = createEffect(
-    async ({ date, regions }: { date: string; regions: number[] }) => {
+    async ({
+      date,
+      regions,
+      illness,
+    }: {
+      date: string;
+      illness: number[];
+      regions: number[];
+    }) => {
       const res = await http.get<ForecastWorst[]>(
         `/stats/forecast/worst/${date}`,
         {
-          params: { region_ids: regions },
+          params: { region_ids: regions, illness_ids: illness },
         }
       );
       return res.data;
@@ -50,7 +69,14 @@ export const createDashboard = () => {
   );
 
   const fetchForcastMapFx = createEffect(
-    async ({ date, regions }: { date: string; regions: number[] }) => {
+    async ({
+      date,
+      regions,
+    }: {
+      date: string;
+      illnes: number[];
+      regions: number[];
+    }) => {
       const res = await http.get<ForecastWorst[]>(
         `/stats/forecast/map/${date}`,
         {
@@ -74,8 +100,12 @@ export const createDashboard = () => {
   const regionsDropdownStore = createFilter();
 
   sample({
-    source: [dateStore.$selectedFilter, regionsDropdownStore.$selectedFilter],
-    fn: ([date, regions]) => ({ date, regions }),
+    source: [
+      dateStore.$selectedFilter,
+      illnessStore.$selectedFilter,
+      regionsDropdownStore.$selectedFilter,
+    ],
+    fn: ([date, illness, regions]) => ({ date, illness, regions }),
     target: [fetchForcastWorstFx, fetchForcastMapFx],
   });
 
@@ -217,6 +247,8 @@ export const createDashboard = () => {
 
     forcastMap,
     fetchForcastMapFx,
+    illnessStore,
+    fetchIllnessOptionsFx,
 
     lineChart,
     fetchLineChartFx,

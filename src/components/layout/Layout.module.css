@@ -40,6 +40,12 @@
   flex-wrap: wrap;
 }
 
+.filters {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  gap: 20px;
+}
 .header {
   color: #89e159;
   font-size: 36px;
