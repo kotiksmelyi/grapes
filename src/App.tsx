@@ -7,24 +7,27 @@ import { dashboard } from './store/dataStore';
 import { ChartsPage } from './pages/charts/ChartsPage';
 import { ArchivePage } from './pages/archive/ArchivePage';
 import { ListPage } from './pages/list/ListPage';
+import { Layout } from './components/layout/Layout';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MapsPage />,
-    index: true,
-  },
-  {
-    path: '/list',
-    element: <ListPage />,
-  },
-  {
-    path: '/charts',
-    element: <ChartsPage />,
-  },
-  {
-    path: '/archive',
-    element: <ArchivePage />,
+    element: <Layout />,
+    children: [
+      { path: '/map', element: <MapsPage /> },
+      {
+        path: '/list',
+        element: <ListPage />,
+      },
+      {
+        path: '/charts',
+        element: <ChartsPage />,
+      },
+      {
+        path: '/archive',
+        element: <ArchivePage />,
+      },
+    ],
   },
 ]);
 

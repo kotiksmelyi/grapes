@@ -24,3 +24,27 @@ export interface ILineChart {
   name: string;
   value: number;
 }
+
+export interface ForecastWorst {
+  date: string;
+  illnesses: Illness[];
+  weather_forecast: Record<string, WeatherForecast>;
+  region: Region;
+}
+
+export interface Illness {
+  name: string;
+  percent: number;
+}
+
+export interface WeatherForecast {
+  T: number;
+  U: number;
+  WW: string;
+}
+
+export interface Region {
+  id: number;
+  name: string;
+  code: string;
+}

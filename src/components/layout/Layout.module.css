@@ -6,8 +6,8 @@
 .container {
   margin: 50px 150px;
   height: 45px;
-  background-color: #1F2431;
-  border: solid 1px #89E159;
+  background-color: #1f2431;
+  border: solid 1px #89e159;
   border-radius: 23px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -22,21 +22,28 @@
   padding: 0px 20px;
   font-size: 16px;
   font-weight: 400px;
-  color: #DBE2F9;
+  color: #dbe2f9;
 }
 
 .active {
-  background-color: #89E159;
-  color: #1F2431!important;
+  background-color: #89e159;
+  color: #1f2431 !important;
   font-size: 16px;
-  font-weight: 700px!important;
+  font-weight: 700px !important;
+}
+
+.headerDropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 150px 50px 150px;
+  flex-wrap: wrap;
 }
 
 .header {
-  color: #89E159;
+  color: #89e159;
   font-size: 36px;
   font-weight: 400;
-  margin: 0 150px 50px 150px;
 }
 
 .image {
@@ -44,4 +51,3 @@
   z-index: -100;
   mix-blend-mode: overlay;
 }
-

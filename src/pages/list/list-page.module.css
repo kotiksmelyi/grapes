@@ -1,0 +1,38 @@
+.container {
+  margin: 0 150px;
+  color: white;
+}
+
+.h4 {
+  color: #ff4d4d;
+}
+
+.regionName {
+  font-size: 1.2em;
+  font-weight: 600;
+  line-height: 39px;
+  letter-spacing: -0.035em;
+  text-align: left;
+  color: #89e159;
+  margin-top: 20px;
+}
+.illnessContainer {
+  margin: 15px 0;
+}
+
+.illnessCards {
+  display: flex;
+  margin-top: 10px;
+  gap: 5%;
+}
+
+.illnessCards > div {
+  border-radius: 20px;
+  border: 1px solid #89e159;
+  padding: 19px 50px;
+  background: #1f2431;
+}
+
+.chance {
+  color: #ff4d4d;
+}
