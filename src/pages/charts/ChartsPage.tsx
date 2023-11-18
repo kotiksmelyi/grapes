@@ -4,8 +4,8 @@ import { PieChartContainer } from '../../components/PieChartContainer/PieChartCo
 
 export const ChartsPage: FC = () => {
   return (
-    <div>
-      <div><PieChartContainer /></div>
+    <div style={{ margin: '0 150px' }}>
+      <PieChartContainer />
     </div>
   );
 };

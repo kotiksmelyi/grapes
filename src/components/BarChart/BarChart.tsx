@@ -1,12 +1,6 @@
-import { FC, useMemo } from 'react';
-import { useStore } from 'effector-react';
-import { dashboard } from '../../store/dataStore';
-import { Chart, EChartsOption } from '../chart/Chart';
-import styles from './PieChartContainer.module.css';
+import React from 'react';
 
-export const PieChartContainer: FC = () => {
-  const pieChart = useStore(dashboard.pieChart.$chart);
-
+export const BarChart = (props: {}) => {
   const options: EChartsOption = useMemo(() => {
     return {
       tooltip: {

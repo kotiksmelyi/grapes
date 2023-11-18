@@ -74,7 +74,7 @@ export const Layout: FC<Props> = ({}) => {
             onChange={(value) =>
               dashboard.regionsDropdownStore.setSelectedFilter(value || null)
             }
-            onClear={console.log}
+            disabled={loading}
             allowClear
           />
           <DropDown
@@ -86,8 +86,11 @@ export const Layout: FC<Props> = ({}) => {
             options={ilnessOptions}
             value={selectedIlness}
             allowClear
+            disabled={loading}
           />
+
           <DatePicker
+            disabled={loading}
             value={dayjs(selectedDate)}
             disabledDate={(date) => {
               return !(

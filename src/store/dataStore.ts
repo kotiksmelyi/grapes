@@ -1,22 +1,9 @@
 import { createFilter } from './filter/createFilter';
-import {
-  createEffect,
-  createEvent,
-  createStore,
-  forward,
-  sample,
-} from 'effector';
+import { createEffect, createStore, sample } from 'effector';
 import { http } from '../lib/server/http';
 import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
+import { ForecastMap, ForecastWorst } from '../lib/types';
 import { createChart } from './chart';
-import {
-  ForecastMap,
-  ForecastWorst,
-  IBarChart,
-  ILineChart,
-  IPage,
-  IPieChart,
-} from '../lib/types';
 
 export interface IRegionsValue {
   id: number;
@@ -113,12 +100,21 @@ export const createDashboard = () => {
     target: [regionsDropdownStore.setFilterOptions],
   });
 
+  const pieChart = createChart();
+
+  sample({
+    clock: fetchForcastWorstFx.doneData,
+    fn: (data) =>
+      data[0].illnesses.map((i) => ({ value: i.percent, name: i.name })),
+    target: pieChart.setChartOptions,
+  });
   return {
     $regions,
     regionsDropdownStore,
     fetchRegionsFx,
     fetchForcastWorstFx: fetchForcastWorstFx,
     forcastWorst,
+    pieChart,
 
     forcastMap,
     fetchForcastMapFx,
