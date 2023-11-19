@@ -6,6 +6,9 @@ import styles from './Charts.module.css';
 
 export const PieChart: FC = () => {
   const pieChart = useStore(dashboard.pieChart.$chart);
+  const common = pieChart.reduce((prev, curr) => prev + curr.value, 0);
+
+  console.log(pieChart);
 
   const options: EChartsOption = useMemo(() => {
     return {
@@ -41,14 +44,17 @@ export const PieChart: FC = () => {
               fontSize: 40,
               fontWeight: 'bold',
               formatter: function (params) {
-                return params.value;
+                return `${params.value}%`;
               },
             },
           },
           labelLine: {
             show: false,
           },
-          data: pieChart,
+          data: pieChart.map((i) => ({
+            value: ((i.value / common) * 100).toFixed(2),
+            name: i.name,
+          })),
         },
       ],
     };

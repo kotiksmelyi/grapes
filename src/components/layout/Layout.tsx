@@ -25,7 +25,7 @@ export const Layout: FC<Props> = ({}) => {
   const worstLoading = useStore(dashboard.fetchForcastWorstFx.pending);
   const loading = regionsLoading || mapLoading || worstLoading;
   useEffect(() => {
-    dashboard.dateStore.setSelectedFilter('08-04-2021');
+    dashboard.dateStore.setSelectedFilter('16-04-2021');
   }, []);
 
   if (!regions) return null;

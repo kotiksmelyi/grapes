@@ -1,37 +1,38 @@
 import { FC } from 'react';
 import { PieChart } from '../../components/Charts/PieChart';
 import { BarChart } from '../../components/Charts/BarChart';
-import { HitMap } from '../../components/Charts/HitMap';
+import { HeatMap } from '../../components/Charts/HeatMap';
 import { useStore } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
 
 export const ChartsPage: FC = () => {
-  const hitmapPercent = useStore(dashboard.$hitmapPercent);
-  const hitmapAmount = useStore(dashboard.$hitmapAmount);
+  const heatmapPercent = useStore(dashboard.$heatmapPercent);
+  const heatmapAmount = useStore(dashboard.$heatmapAmount);
+  console.log(heatmapPercent, heatmapAmount);
 
   return (
     <div style={{ margin: '0 150px' }}>
       <BarChart />
       <PieChart />
-      {hitmapPercent && (
-        <HitMap
-          name='tigr'
-          xAxis={hitmapPercent.dates}
-          yAxis={hitmapPercent.illnesses}
-          data={hitmapPercent.data}
-          min={hitmapPercent.min}
-          max={hitmapPercent.max}
+      {heatmapPercent && (
+        <HeatMap
+          xAxis={heatmapPercent.dates}
+          yAxis={heatmapPercent.illnesses}
+          data1={heatmapPercent.data}
+          data2={heatmapPercent.forecast}
+          min={heatmapPercent.min}
+          max={heatmapPercent.max}
         />
       )}
 
-      {hitmapAmount && (
-        <HitMap
-          name='tigr'
-          xAxis={hitmapAmount.dates}
-          yAxis={hitmapAmount.illnesses}
-          data={hitmapAmount.data}
-          min={hitmapAmount.min}
-          max={hitmapAmount.max}
+      {heatmapAmount && (
+        <HeatMap
+          xAxis={heatmapAmount.dates}
+          yAxis={heatmapAmount.illnesses}
+          data1={heatmapAmount.data}
+          data2={heatmapAmount.forecast}
+          min={heatmapAmount.min}
+          max={heatmapAmount.max}
         />
       )}
     </div>

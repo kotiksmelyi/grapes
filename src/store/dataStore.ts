@@ -109,7 +109,7 @@ export const createDashboard = () => {
     return res.data;
   });
 
-  const $hitmapPercent = createStore<any>(null).on(
+  const $heatmapPercent = createStore<any>(null).on(
     fetchHeatmapPercent.doneData,
     (_, payload) => payload
   );
@@ -120,14 +120,13 @@ export const createDashboard = () => {
     });
     return res.data;
   });
-  const $hitmapAmount = createStore<any>(null).on(
+  const $heatmapAmount = createStore<any>(null).on(
     fetchHeatmapAmount.doneData,
     (_, payload) => payload
   );
 
   sample({
     clock: dateStore.$selectedFilter,
-    fn: () => '15-08-2021',
     target: [fetchHeatmapAmount, fetchHeatmapPercent],
   });
 
@@ -138,8 +137,8 @@ export const createDashboard = () => {
     target: pieChart.setChartOptions,
   });
   return {
-    $hitmapAmount,
-    $hitmapPercent,
+    $heatmapAmount: $heatmapAmount,
+    $heatmapPercent: $heatmapPercent,
     $regions,
     regionsDropdownStore,
     fetchRegionsFx,
