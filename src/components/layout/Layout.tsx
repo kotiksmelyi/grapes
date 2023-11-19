@@ -14,7 +14,6 @@ const formatTemplate = 'DD-MM-YYYY';
 
 const setToday = () => {
   const today = dayjs().format(formatTemplate);
-  // dashboard.dateStore.setSelectedFilter('15-04-2021');
   dashboard.dateStore.setSelectedFilter(today);
 };
 
@@ -33,7 +32,7 @@ export const Layout: FC<Props> = ({}) => {
   const worstLoading = useStore(dashboard.fetchForcastWorstFx.pending);
   const loading = regionsLoading || mapLoading || worstLoading;
   useEffect(() => {
-    setToday();
+    dashboard.dateStore.setSelectedFilter('15-04-2021');
   }, []);
 
   if (!regions) return null;
@@ -114,9 +113,11 @@ export const Layout: FC<Props> = ({}) => {
               }
             />
           </div>
-          <Button type='primary' onClick={setToday}>
-            Выбрать сегодня
-          </Button>
+          {selected && (
+            <Button type='primary' onClick={setToday}>
+              Выбрать сегодня
+            </Button>
+          )}
         </div>
       </div>
       {loading ? <Spin size='large' /> : <Outlet />}
