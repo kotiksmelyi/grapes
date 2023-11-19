@@ -1,6 +1,10 @@
 import './App.css';
 import { ConfigProvider } from 'antd';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from 'react-router-dom';
 import { MapsPage } from './pages/home/MapsPage';
 import { useEffect } from 'react';
 import { dashboard } from './store/dataStore';
@@ -14,6 +18,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
+      { path: '/', element: <Navigate to={'map'} /> },
       { path: '/map', element: <MapsPage /> },
       {
         path: '/list',
