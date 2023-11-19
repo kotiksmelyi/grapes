@@ -16,7 +16,7 @@ export const PieChart: FC = () => {
         trigger: 'item',
       },
       legend: {
-        top: '1%',
+        top: '10px',
         left: 'center',
         backgroundColor: 'white',
         borderRadius: 8,

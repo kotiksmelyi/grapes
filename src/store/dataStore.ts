@@ -60,13 +60,14 @@ export const createDashboard = () => {
     async ({
       date,
       regions,
+      illness,
     }: {
       date: string;
-      illnes: number[];
+      illness: number[];
       regions: number[];
     }) => {
       const res = await http.get<ForecastMap[]>(`/stats/forecast/map/${date}`, {
-        params: { region_ids: regions },
+        params: { region_ids: regions, illness_ids: illness },
       });
       return res.data;
     }
