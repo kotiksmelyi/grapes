@@ -1,14 +1,21 @@
 import dayjs from 'dayjs';
-import { FC, ReactNode, useEffect } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { FC, useEffect } from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
 import styles from './Layout.module.css';
 import grapes from './assets/grape.svg';
 import { useStore, useUnit } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
 import { DropDown } from '../DropDown/DropDown';
-import { DatePicker, Spin } from 'antd';
+import { Button, DatePicker, Spin } from 'antd';
 
 interface Props {}
+
+const formatTemplate = 'DD-MM-YYYY';
+
+const setToday = () => {
+  const today = dayjs().format(formatTemplate);
+  dashboard.dateStore.setSelectedFilter('15-04-2021');
+};
 
 export const Layout: FC<Props> = ({}) => {
   const { $filters: dropdownOptions, $selectedFilter: selected } = useUnit(
@@ -25,7 +32,7 @@ export const Layout: FC<Props> = ({}) => {
   const worstLoading = useStore(dashboard.fetchForcastWorstFx.pending);
   const loading = regionsLoading || mapLoading || worstLoading;
   useEffect(() => {
-    dashboard.dateStore.setSelectedFilter('16-04-2021');
+    setToday();
   }, []);
 
   if (!regions) return null;
@@ -88,20 +95,27 @@ export const Layout: FC<Props> = ({}) => {
             allowClear
             disabled={loading}
           />
-
-          <DatePicker
-            disabled={loading}
-            value={dayjs(selectedDate)}
-            disabledDate={(date) => {
-              return !(
-                date.diff('2021-04-15', 'day') > 0 &&
-                date.diff('2021-10-20', 'day') < 0
-              );
-            }}
-            allowClear={false}
-            format={'DD-MM-YYYY'}
-            onChange={(_, date) => dashboard.dateStore.setSelectedFilter(date)}
-          />
+          <div>
+            <DatePicker
+              style={{ width: '100%' }}
+              disabled={loading}
+              value={dayjs(selectedDate, formatTemplate)}
+              disabledDate={(date) => {
+                return !(
+                  date.diff('2021-04-15', 'day') > 0 &&
+                  date.diff('2021-10-20', 'day') < 0
+                );
+              }}
+              allowClear={false}
+              format={formatTemplate}
+              onChange={(_, date) =>
+                dashboard.dateStore.setSelectedFilter(date)
+              }
+            />
+          </div>
+          <Button type='primary' onClick={setToday}>
+            Выбрать сегодня
+          </Button>
         </div>
       </div>
       {loading ? <Spin size='large' /> : <Outlet />}

@@ -35,6 +35,7 @@ export const ChartsPage: FC = () => {
       {heatmapPercent && (
         <>
           <HeatMap
+          isPercent
             xAxis={heatmapPercent.dates}
             yAxis={heatmapPercent.illnesses}
             data1={heatmapPercent.data}

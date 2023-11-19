@@ -10,6 +10,7 @@ type Props = {
   data2: any[];
   xAxis: string[];
   yAxis: string[];
+  isPercent?: boolean;
 };
 export const HeatMap: FC<Props> = (props) => {
   const options: EChartsOption = useMemo(() => {
@@ -41,6 +42,7 @@ export const HeatMap: FC<Props> = (props) => {
           min: props.min,
           max: 10,
           orient: 'horizontal',
+          calculable: true,
           left: '25%',
           bottom: '15%',
           seriesIndex: 0,
@@ -70,6 +72,9 @@ export const HeatMap: FC<Props> = (props) => {
           data: props.data1,
           label: {
             show: true,
+            formatter: (value) => {
+              props.isPercent ? `${value}%` : value;
+            },
           },
 
           emphasis: {
@@ -83,8 +88,13 @@ export const HeatMap: FC<Props> = (props) => {
           name: props.name,
           type: 'heatmap',
           data: props.data2,
+
           label: {
             show: true,
+
+            formatter: (value) => {
+              props.isPercent ? `${value}%` : value;
+            },
           },
           emphasis: {
             itemStyle: {
