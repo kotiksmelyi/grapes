@@ -111,6 +111,14 @@ export const HeatMap: FC<Props> = (props) => {
 
   return (
     <div className={styles.container}>
+      <span style={{ left: '23%' }} className={styles.text}>
+        Фактические значения
+      </span>
+
+      <span style={{ right: '12%' }} className={styles.text}>
+        Прогнозируемые значения
+      </span>
+
       <Chart option={options} />
     </div>
   );

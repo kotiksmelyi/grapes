@@ -1,7 +1,14 @@
 .container {
+  position: relative;
+  color: white;
   height: 800px;
   border: #8c64d8 2px solid;
   border-radius: 20px;
   overflow: hidden;
   margin-bottom: 50px;
+}
+
+.text {
+  bottom: 7%;
+  position: absolute;
 }
