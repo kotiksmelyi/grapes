@@ -3,7 +3,8 @@ import { PieChart } from '../../components/Charts/PieChart';
 import { BarChart } from '../../components/Charts/BarChart';
 import { HeatMap } from '../../components/Charts/HeatMap';
 import { useStore } from 'effector-react';
-import { dashboard } from '../../store/dataStore';
+import { dashboard, formatTemplate } from '../../store/dataStore';
+import dayjs from 'dayjs';
 
 export const ChartsPage: FC = () => {
   const heatmapPercent = useStore(dashboard.$heatmapPercent);
@@ -11,6 +12,12 @@ export const ChartsPage: FC = () => {
   const selectedRegion = useStore(
     dashboard.regionsDropdownStore.$selectedFilter
   );
+
+  const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
+
+  const isToday =
+    dayjs().format(formatTemplate) ===
+    dayjs(selectedDate).format(formatTemplate);
 
   return (
     <div style={{ margin: '0 150px' }}>
@@ -37,8 +44,18 @@ export const ChartsPage: FC = () => {
           </div>
         </div>
       )}
-      {heatmapPercent && (
-        <>
+      {heatmapPercent && !isToday && (
+        <div>
+          <h2
+            style={{
+              color: '#89E159',
+              fontWeight: '400',
+              marginBottom: '24px',
+            }}
+          >
+            Соотношение заболеваний в выбранном регионе
+          </h2>
+
           <HeatMap
             isPercent
             xAxis={heatmapPercent.dates}
@@ -48,11 +65,21 @@ export const ChartsPage: FC = () => {
             min={heatmapPercent.min}
             max={heatmapPercent.max}
           />
-        </>
+        </div>
       )}
 
-      {heatmapAmount && (
-        <>
+      {heatmapAmount && !isToday && (
+        <div>
+          <h2
+            style={{
+              color: '#89E159',
+              fontWeight: '400',
+              marginBottom: '24px',
+            }}
+          >
+            Соотношение заболеваний в выбранном регионе
+          </h2>
+
           <HeatMap
             xAxis={heatmapAmount.dates}
             yAxis={heatmapAmount.illnesses}
@@ -61,7 +88,7 @@ export const ChartsPage: FC = () => {
             min={heatmapAmount.min}
             max={heatmapAmount.max}
           />
-        </>
+        </div>
       )}
     </div>
   );

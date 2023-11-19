@@ -4,6 +4,7 @@ import { http } from '../lib/server/http';
 import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
 import { ForecastMap, ForecastWorst } from '../lib/types';
 import { createChart } from './chart';
+import dayjs from 'dayjs';
 
 export interface IRegionsValue {
   id: number;
@@ -11,6 +12,7 @@ export interface IRegionsValue {
   coords: [number, number][];
   code: string;
 }
+export const formatTemplate = 'DD-MM-YYYY';
 
 export const createDashboard = () => {
   const fetchRegionsFx = createEffect(async () => {
@@ -128,6 +130,8 @@ export const createDashboard = () => {
 
   sample({
     clock: dateStore.$selectedFilter,
+    filter: (date) =>
+      dayjs().format(formatTemplate) !== dayjs(date).format(formatTemplate),
     target: [fetchHeatmapAmount, fetchHeatmapPercent],
   });
 

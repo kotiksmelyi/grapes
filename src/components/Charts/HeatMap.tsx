@@ -3,7 +3,6 @@ import styles from './Charts.module.css';
 import { FC, useMemo } from 'react';
 
 type Props = {
-  name: string;
   min: number;
   max: number;
   data1: any[];
