@@ -1,6 +1,8 @@
 .container {
+  color: white;
+  position: relative;
   height: 600px;
-  border: #89E159 2px solid;
+  border: #89e159 2px solid;
   border-radius: 20px;
   overflow: hidden;
   margin-bottom: 50px;
@@ -8,5 +10,6 @@
 
 .text {
   bottom: 7%;
+  z-index: 100;
   position: absolute;
 }

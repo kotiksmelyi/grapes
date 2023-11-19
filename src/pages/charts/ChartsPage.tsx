@@ -11,13 +11,18 @@ export const ChartsPage: FC = () => {
   const selectedRegion = useStore(
     dashboard.regionsDropdownStore.$selectedFilter
   );
-  console.log(heatmapPercent, heatmapAmount);
 
   return (
     <div style={{ margin: '0 150px' }}>
       {selectedRegion && (
         <div>
-          <h2 style={{ color: '#89E159', fontWeight: '400', marginBottom: '24px' }}>
+          <h2
+            style={{
+              color: '#89E159',
+              fontWeight: '400',
+              marginBottom: '24px',
+            }}
+          >
             Соотношение заболеваний в выбранном регионе
           </h2>
           <div
@@ -35,7 +40,7 @@ export const ChartsPage: FC = () => {
       {heatmapPercent && (
         <>
           <HeatMap
-          isPercent
+            isPercent
             xAxis={heatmapPercent.dates}
             yAxis={heatmapPercent.illnesses}
             data1={heatmapPercent.data}

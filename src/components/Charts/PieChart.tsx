@@ -8,8 +8,6 @@ export const PieChart: FC = () => {
   const pieChart = useStore(dashboard.pieChart.$chart);
   const common = pieChart.reduce((prev, curr) => prev + curr.value, 0);
 
-  console.log(pieChart);
-
   const options: EChartsOption = useMemo(() => {
     return {
       tooltip: {
