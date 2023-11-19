@@ -14,7 +14,6 @@ const formatTemplate = 'DD-MM-YYYY';
 
 const setToday = () => {
   const today = dayjs().format(formatTemplate);
-  // dashboard.dateStore.setSelectedFilter('15-04-2021');
   dashboard.dateStore.setSelectedFilter(today);
 };
 

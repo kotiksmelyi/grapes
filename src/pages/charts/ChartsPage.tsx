@@ -4,10 +4,13 @@ import { BarChart } from '../../components/Charts/BarChart';
 import { HeatMap } from '../../components/Charts/HeatMap';
 import { useStore } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
+import dayjs from 'dayjs';
 
 export const ChartsPage: FC = () => {
   const heatmapPercent = useStore(dashboard.$heatmapPercent);
   const heatmapAmount = useStore(dashboard.$heatmapAmount);
+  const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
+  const isTodayDate = dayjs().format('DD-MM-YYYY') === selectedDate;
   const selectedRegion = useStore(
     dashboard.regionsDropdownStore.$selectedFilter
   );
@@ -37,7 +40,7 @@ export const ChartsPage: FC = () => {
           </div>
         </div>
       )}
-      {heatmapPercent && (
+      {heatmapPercent && !isTodayDate && (
         <>
           <HeatMap
             isPercent
@@ -51,7 +54,7 @@ export const ChartsPage: FC = () => {
         </>
       )}
 
-      {heatmapAmount && (
+      {heatmapAmount && !isTodayDate && (
         <>
           <HeatMap
             xAxis={heatmapAmount.dates}
