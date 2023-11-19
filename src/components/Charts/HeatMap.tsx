@@ -15,6 +15,7 @@ type Props = {
 export const HeatMap: FC<Props> = (props) => {
   const options: EChartsOption = useMemo(() => {
     return {
+      textStyle: { color: 'white' },
       tooltip: {
         position: 'top',
       },
@@ -40,11 +41,12 @@ export const HeatMap: FC<Props> = (props) => {
       visualMap: [
         {
           min: props.min,
-          max: 10,
+          max: props.max,
+          textStyle: { color: 'white' },
           orient: 'horizontal',
           calculable: true,
           left: '25%',
-          bottom: '15%',
+          bottom: '10%',
           seriesIndex: 0,
           inRange: {
             color: ['#89e159', '#FF4D4D'],
@@ -54,10 +56,11 @@ export const HeatMap: FC<Props> = (props) => {
         {
           min: props.min,
           max: props.max,
+          textStyle: { color: 'white' },
           calculable: true,
           orient: 'horizontal',
           right: '15%',
-          bottom: '15%',
+          bottom: '10%',
           seriesIndex: 1,
           inRange: {
             color: ['rgba(137, 225, 89, 0.5)', 'rgba(255, 77, 77, 0.5)'],
@@ -67,13 +70,13 @@ export const HeatMap: FC<Props> = (props) => {
       ],
       series: [
         {
-          name: props.name,
           type: 'heatmap',
           data: props.data1,
           label: {
             show: true,
             formatter: (value) => {
-              props.isPercent ? `${value}%` : value;
+              const v = value.data[2];
+              return props.isPercent ? `${v}%` : v;
             },
           },
 
@@ -85,15 +88,14 @@ export const HeatMap: FC<Props> = (props) => {
           },
         },
         {
-          name: props.name,
           type: 'heatmap',
           data: props.data2,
 
           label: {
             show: true,
-
             formatter: (value) => {
-              props.isPercent ? `${value}%` : value;
+              const v = value.data[2];
+              return props.isPercent ? `${v}%` : v;
             },
           },
           emphasis: {
