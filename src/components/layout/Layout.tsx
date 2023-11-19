@@ -4,7 +4,12 @@ import { NavLink, Outlet } from 'react-router-dom';
 import styles from './Layout.module.css';
 import grapes from './assets/grape.svg';
 import { useStore, useUnit } from 'effector-react';
-import { dashboard, formatTemplate } from '../../store/dataStore';
+import {
+  dashboard,
+  formatTemplate,
+  maxDate,
+  minDate,
+} from '../../store/dataStore';
 import { DropDown } from '../DropDown/DropDown';
 import { Button, DatePicker, Spin } from 'antd';
 
@@ -75,8 +80,7 @@ export const Layout: FC<Props> = ({}) => {
               value={dayjs(selectedDate, formatTemplate)}
               disabledDate={(date) => {
                 return !(
-                  date.diff('2021-04-15', 'day') > 0 &&
-                  date.diff('2021-10-20', 'day') < 0
+                  date.diff(minDate, 'day') > 0 && date.diff(maxDate, 'day') < 0
                 );
               }}
               allowClear={false}

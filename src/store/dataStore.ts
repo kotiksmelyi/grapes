@@ -13,6 +13,8 @@ export interface IRegionsValue {
   code: string;
 }
 export const formatTemplate = 'DD-MM-YYYY';
+export const minDate = '2021-04-15';
+export const maxDate = '2021-09-30';
 
 export const createDashboard = () => {
   const fetchRegionsFx = createEffect(async () => {

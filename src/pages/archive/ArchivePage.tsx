@@ -11,7 +11,12 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import { http } from '../../lib/server/http';
 import { useStore } from 'effector-react';
-import { dashboard } from '../../store/dataStore';
+import {
+  dashboard,
+  formatTemplate,
+  maxDate,
+  minDate,
+} from '../../store/dataStore';
 
 interface IData {
   date: string;
@@ -98,11 +103,10 @@ export const ArchivePage: FC = () => {
         >
           <Form.Item label='Дата' labelCol={{ span: 24 }} name='date'>
             <DatePicker
-              format={'DD-MM-YYYY'}
+              format={formatTemplate}
               disabledDate={(date) => {
                 return !(
-                  date.diff('2021-04-07', 'day') > 0 &&
-                  date.diff('2021-10-31', 'day') < 0
+                  date.diff(minDate, 'day') > 0 && date.diff(maxDate, 'day') < 0
                 );
               }}
             />
