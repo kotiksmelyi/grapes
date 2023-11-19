@@ -15,9 +15,7 @@ export const ChartsPage: FC = () => {
 
   const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
 
-  const isToday =
-    dayjs().format(formatTemplate) ===
-    dayjs(selectedDate).format(formatTemplate);
+  const isToday = dayjs().format(formatTemplate) === selectedDate;
 
   return (
     <div style={{ margin: '0 150px' }}>

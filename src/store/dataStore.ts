@@ -130,8 +130,7 @@ export const createDashboard = () => {
 
   sample({
     clock: dateStore.$selectedFilter,
-    filter: (date) =>
-      dayjs().format(formatTemplate) !== dayjs(date).format(formatTemplate),
+    filter: (date) => dayjs().format(formatTemplate) !== date,
     target: [fetchHeatmapAmount, fetchHeatmapPercent],
   });
 
