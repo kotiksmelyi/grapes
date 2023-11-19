@@ -1,7 +1,6 @@
-import { Polygon, useYMaps, Map, Placemark } from '@pbe/react-yandex-maps';
+import { Polygon, Map } from '@pbe/react-yandex-maps';
 import { useStore } from 'effector-react';
-import { FC, useEffect, useRef, useState } from 'react';
-import { http } from '../../lib/server/http';
+import { FC } from 'react';
 import { dashboard } from '../../store/dataStore';
 
 const getHint = (name: string, value: number) => {

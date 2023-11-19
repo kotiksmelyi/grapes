@@ -6,7 +6,7 @@ import grapes from './assets/grape.svg';
 import { useStore, useUnit } from 'effector-react';
 import { dashboard } from '../../store/dataStore';
 import { DropDown } from '../DropDown/DropDown';
-import { DatePicker } from 'antd';
+import { DatePicker, Spin } from 'antd';
 
 interface Props {}
 
@@ -20,8 +20,12 @@ export const Layout: FC<Props> = ({}) => {
   const selectedDate = useStore(dashboard.dateStore.$selectedFilter);
   const regions = useStore(dashboard.$regions);
 
+  const regionsLoading = useStore(dashboard.fetchRegionsFx.pending);
+  const mapLoading = useStore(dashboard.fetchForcastMapFx.pending);
+  const worstLoading = useStore(dashboard.fetchForcastWorstFx.pending);
+  const loading = regionsLoading || mapLoading || worstLoading;
   useEffect(() => {
-    dashboard.dateStore.setSelectedFilter('08-04-2021');
+    dashboard.dateStore.setSelectedFilter('16-04-2021');
   }, []);
 
   if (!regions) return null;
@@ -70,7 +74,7 @@ export const Layout: FC<Props> = ({}) => {
             onChange={(value) =>
               dashboard.regionsDropdownStore.setSelectedFilter(value || null)
             }
-            onClear={console.log}
+            disabled={loading}
             allowClear
           />
           <DropDown
@@ -82,13 +86,16 @@ export const Layout: FC<Props> = ({}) => {
             options={ilnessOptions}
             value={selectedIlness}
             allowClear
+            disabled={loading}
           />
+
           <DatePicker
+            disabled={loading}
             value={dayjs(selectedDate)}
             disabledDate={(date) => {
               return !(
-                date.diff('2021-04-07', 'day') > 0 &&
-                date.diff('2021-10-31', 'day') < 0
+                date.diff('2021-04-15', 'day') > 0 &&
+                date.diff('2021-10-20', 'day') < 0
               );
             }}
             allowClear={false}
@@ -97,7 +104,7 @@ export const Layout: FC<Props> = ({}) => {
           />
         </div>
       </div>
-      <Outlet />
+      {loading ? <Spin size='large' /> : <Outlet />}
     </div>
   );
 };

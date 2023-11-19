@@ -1,22 +1,9 @@
 import { createFilter } from './filter/createFilter';
-import {
-  createEffect,
-  createEvent,
-  createStore,
-  forward,
-  sample,
-} from 'effector';
+import { createEffect, createEvent, createStore, sample } from 'effector';
 import { http } from '../lib/server/http';
 import { toDropdownOptions } from '../lib/utils/toDropdownOptions';
+import { ForecastMap, ForecastWorst } from '../lib/types';
 import { createChart } from './chart';
-import {
-  ForecastMap,
-  ForecastWorst,
-  IBarChart,
-  ILineChart,
-  IPage,
-  IPieChart,
-} from '../lib/types';
 
 export interface IRegionsValue {
   id: number;
@@ -114,143 +101,57 @@ export const createDashboard = () => {
     target: [regionsDropdownStore.setFilterOptions],
   });
 
-  const fetchFeatureFx = createEffect(async () => {
-    const res = await http.get('/stats/features');
-    return toDropdownOptions(res.data);
-  });
+  const pieChart = createChart();
 
-  const featureStore = createFilter();
-
-  forward({
-    from: fetchFeatureFx.doneData,
-    to: featureStore.setFilterOptions,
-  });
-  sample({
-    clock: fetchFeatureFx.doneData,
-    fn: (source) => source[0].value,
-    target: featureStore.setSelectedFilter,
-  });
-
-  const fetchBarChartFx = createEffect(
-    async ({ feature, order }: { feature?: number; order?: boolean }) => {
-      const res = await http.get<IPage<IBarChart>>('/stats/feature-values', {
-        params: {
-          feature,
-          order: order ? 'value' : '-value',
-          limit: 10,
-        },
-      });
-      return res.data.results;
-    }
-  );
-
-  const barChart = createChart<IBarChart>();
-
-  forward({
-    from: fetchBarChartFx.doneData,
-    to: barChart.setChartOptions,
-  });
-
-  const setOrder = createEvent<boolean>();
-  const $order = createStore<boolean>(false).on(
-    setOrder,
-    (_, payload) => payload
-  );
-
-  const fetchPieChartFx = createEffect(
-    async ({ feature, region }: { feature: number; region: number }) => {
-      const res = await http.get<IPage<IPieChart>>(
-        '/stats/feature-values/children',
-        {
-          params: {
-            limit: 10,
-            feature__parent_feature: feature,
-            region,
-          },
-        }
-      );
-      return res.data.results;
-    }
-  );
-  const fetchLineChartFx = createEffect(
-    async ({ feature, region }: { feature: number; region: number }) => {
-      const res = await http.get<IPage<IPieChart>>(
-        '/stats/feature-values/yearly',
-        {
-          params: {
-            feature: feature,
-            region,
-          },
-        }
-      );
-      return res.data;
-    }
-  );
-
-  const pieChart = createChart<IPieChart>();
-
-  forward({
-    from: fetchPieChartFx.doneData,
-    to: pieChart.setChartOptions,
-  });
-  sample({
-    source: [
-      regionsDropdownStore.$selectedFilter,
-      featureStore.$selectedFilter,
-    ],
-    fn: (source) => ({
-      region: source[0] !== null ? source[0] : 1,
-      feature: source[1] !== null ? source[1] : 1,
-    }),
-    target: [fetchPieChartFx, fetchLineChartFx],
-  });
-
-  const fetchAnalysisFx = createEffect(async (id: number | null) => {
-    const res = await http.get('/analysis/analysis', {
-      params: { region_id: id },
+  const fetchHeatmapPercent = createEffect(async (date: string) => {
+    const res = await http.get(`stats/heatmap/${date}`, {
+      params: { mode: 'percent' },
     });
     return res.data;
   });
 
-  const $analysis = createStore<
-    {
-      text: string;
-      plot: { data: any; layout: any };
-      status: 'bad' | 'good' | 'ok';
-    }[]
-  >([]).on(fetchAnalysisFx.doneData, (_, payload) => payload);
+  const $heatmapPercent = createStore<any>(null).on(
+    fetchHeatmapPercent.doneData,
+    (_, payload) => payload
+  );
 
-  forward({
-    from: regionsDropdownStore.$selectedFilter,
-    to: fetchAnalysisFx,
+  const fetchHeatmapAmount = createEffect(async (date: string) => {
+    const res = await http.get(`stats/heatmap/${date}`, {
+      params: { mode: 'amount' },
+    });
+    return res.data;
+  });
+  const $heatmapAmount = createStore<any>(null).on(
+    fetchHeatmapAmount.doneData,
+    (_, payload) => payload
+  );
+
+  sample({
+    clock: dateStore.$selectedFilter,
+    target: [fetchHeatmapAmount, fetchHeatmapPercent],
   });
 
-  const lineChart = createChart<ILineChart>();
-
+  sample({
+    clock: fetchForcastWorstFx.doneData,
+    fn: (data) =>
+      data[0].illnesses.map((i) => ({ value: i.percent, name: i.name })),
+    target: pieChart.setChartOptions,
+  });
   return {
+    $heatmapAmount: $heatmapAmount,
+    $heatmapPercent: $heatmapPercent,
     $regions,
-    featureStore,
     regionsDropdownStore,
     fetchRegionsFx,
-    fetchFeatureFx,
-    pieChart,
-    barChart,
-    fetchPieChartFx,
-    fetchBarChartFx,
-    setOrder,
-    $order,
     fetchForcastWorstFx: fetchForcastWorstFx,
     forcastWorst,
-    $analysis,
-    fetchAnalysisFx,
+    pieChart,
 
     forcastMap,
     fetchForcastMapFx,
     illnessStore,
     fetchIllnessOptionsFx,
 
-    lineChart,
-    fetchLineChartFx,
     dateStore,
   };
 };
